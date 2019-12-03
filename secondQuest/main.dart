@@ -2,6 +2,49 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 
+int RunAlgorithm(List<dynamic> intcode ,int n, int v){
+  var opcode;
+  var in1position;
+  var in2position;
+  var outposition;
+
+  intcode[1] = n;
+  intcode[2] = v;
+
+  for(var i = 0; i < intcode.length; i = i + 4){
+    opcode = intcode[i];
+    in1position = intcode[i+1];
+    in2position = intcode[i+2];
+    outposition = intcode[i+3];
+
+    if(opcode == 1){
+      intcode[outposition] = intcode[in1position] + intcode[in2position];
+    }else if(opcode == 2){
+      intcode[outposition] = intcode[in1position] * intcode[in2position];
+    }else if(opcode == 99){
+      break;
+    } else{
+      print("unknown opcode!");
+    }
+  }
+
+//  for(var i = 0; i <code.length; i++){
+//    print(code[i]);
+//  }
+
+  return intcode[0];
+}
+
+List<dynamic> CopyList(List<dynamic> list){
+   var l = new List();
+
+  for(var element in list){
+    l.add(element);
+  }
+
+  return l;
+}
+
 void main() async {
   final file = new File('input.txt');
   Stream<List<int>> inputStream = file.openRead();
@@ -28,30 +71,22 @@ void main() async {
     }
   }
 
-  var opcode;
-  var in1position;
-  var in2position;
-  var outposition;
+  var codeRun;
+//  codeRun = CopyList(code);
+//  print(RunAlgorithm(code, 12, 2));
 
-  for(var i = 0; i < code.length; i = i + 4){
-    opcode = code[i];
-    in1position = code[i+1];
-    in2position = code[i+2];
-    outposition = code[i+3];
 
-    if(opcode == 1){
-      code[outposition] = code[in1position] + code[in2position];
-    }else if(opcode == 2){
-      code[outposition] = code[in1position] * code[in2position];
-    }else if(opcode == 99){
-      break;
-    } else{
-      print("unknown opcode!");
-    }
-  }
+  int answer = 19690720;
 
-  for(var i = 0; i <code.length; i++){
-    print(code[i]);
+
+  for(int n = 0; n < 100; n++){
+   for(int v = 0; v < 100; v++){
+     codeRun = CopyList(code);
+
+     if(RunAlgorithm(codeRun, n, v) == answer){
+       print('HOORAY! n=$n, v=$v');
+     }
+   }
   }
 
 
